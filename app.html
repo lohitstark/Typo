@@ -51,8 +51,7 @@
                 return `{\n${typeProperties.join('\n')}\n${indentSpaces}}`;
             }
 
-            var generatedType = processObject(obj);
-            return generatedType;
+            processObject(obj);
         }
 
         function copyResponseToClipboard() {
