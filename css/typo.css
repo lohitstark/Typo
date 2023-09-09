@@ -68,7 +68,7 @@ body {
 .copyButton {
     position: absolute;
     top: 10%;
-    right: 20px;
+    right: 40px;
     transform: translateY(-50%);
     background-color: #4caf50;
     color: white;
