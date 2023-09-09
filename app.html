@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/typo.css">
     <link rel="icon" href="./img/icon.png" type="image/x-icon" style="mix-blend-mode: color-burn">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <title>Typo</title>
 </head>
 <body>
@@ -23,10 +24,34 @@
             </div>
         </div>
     </form>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" ></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         function generateTypesFromObject(indent = 2) {
-            var obj = JSON.parse(document.getElementById("inputText").value);
-            console.log(obj);
+            var inputData=document.getElementById("inputText").value
+            if(!isValidJSON(inputData))
+            {   
+                            toastr["error"]("Invalid JSON Object", "Error")
+                            toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": true,
+                            "progressBar": false,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                            }
+                return "Error"
+            }
+            var obj = JSON.parse(inputData)
             var typeDeclarations = [];
 
             function processObject(obj, indentLevel = 0) {
@@ -50,8 +75,35 @@
                 document.getElementById("responseText").value = `{\n${typeProperties.join('\n')}\n${indentSpaces}}`;
                 return `{\n${typeProperties.join('\n')}\n${indentSpaces}}`;
             }
-
             processObject(obj);
+            toastr["success"]("Type generated ", "Success ")
+
+            toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+            }
+
+            function isValidJSON(str) {
+            try {
+                JSON.parse(str);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
         }
 
         function copyResponseToClipboard() {
@@ -62,3 +114,6 @@
     </script>
 </body>
 </html>
+
+
+
