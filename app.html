@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/typo.css">
+    <link rel="icon" href="./img/icon.png" type="image/x-icon" style="mix-blend-mode: color-burn">
+    <title>Typo</title>
+</head>
+<body>
+    <div class="title">Typo Object to Type Converter for TypeScript</div>
+    <form>
+        <div class="container">
+            <div class="inputForm">
+                <div class="inputContainer">
+                    <textarea class="inputBox" name="inputText" id="inputText" cols="80" rows="14" placeholder="Enter the Object"></textarea>
+                </div>
+                <button class="generateButton" type="button" onclick="generateTypesFromObject()">Generate</button>
+                <div class="inputContainer">
+                    <textarea class="responseBox" name="responseText" id="responseText" cols="80" rows="13" placeholder="Your response"></textarea>
+                    <button class="copyButton" type="button" onclick="copyResponseToClipboard()">Copy</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+        function generateTypesFromObject(indent = 2) {
+            var obj = JSON.parse(document.getElementById("inputText").value);
+            console.log(obj);
+            var typeDeclarations = [];
+
+            function processObject(obj, indentLevel = 0) {
+                var indentSpaces = ' '.repeat(indentLevel * indent);
+                var typeProperties = [];
+
+                for (var [key, value] of Object.entries(obj)) {
+                    if (typeof value === 'object' && !Array.isArray(value)) {
+                        var nestedType = processObject(value, indentLevel + 1);
+                        typeProperties.push(`${indentSpaces}${key}: ${nestedType};`);
+                    } else if (Array.isArray(value)) {
+                        typeProperties.push(`${indentSpaces}${key}: ${'Array'}<${typeof value[0]}>;`);
+                    }
+                    else if (typeof value === 'string') {
+                        typeProperties.push(`${indentSpaces}${key}: ${'string'};`);
+                    }
+                    else if (typeof value === 'number') {
+                        typeProperties.push(`${indentSpaces}${key}: ${'number'};`);
+                    }
+                }
+                document.getElementById("responseText").value = `{\n${typeProperties.join('\n')}\n${indentSpaces}}`;
+                return `{\n${typeProperties.join('\n')}\n${indentSpaces}}`;
+            }
+
+            var generatedType = processObject(obj);
+            return generatedType;
+        }
+
+        function copyResponseToClipboard() {
+            var copyText = document.getElementById("responseText");
+            copyText.select();
+            document.execCommand("copy");
+        }
+    </script>
+</body>
+</html>
